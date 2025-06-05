@@ -118,7 +118,7 @@ from . import agent
 # You can also define package-level information here:
 
 __version__ = "1.0.0"
-__author__ = "Nicky (Learning Full Stack Development)"
+__author__ = "Nicky Clarke"
 __description__ = "Multi-agent debate system using Google ADK"
 
 # These variables become available when someone imports the package:
