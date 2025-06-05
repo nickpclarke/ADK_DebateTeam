@@ -96,6 +96,21 @@ def end_debate(tool_context: ToolContext) -> dict:
 transfer_tool = FunctionTool(func=return_to_greeter)
 end_debate_tool = FunctionTool(func=end_debate)
 
+# Tool for transferring to the debate workflow
+def start_debate_workflow(tool_context: ToolContext) -> dict:
+    """Transfers control to the AIDebateWorkflow to begin the debate process.
+    
+    Returns:
+        dict: Confirmation of transfer to debate workflow
+    """
+    tool_context.actions.transfer_to_agent = "AIDebateWorkflow"
+    return {
+        "status": "success", 
+        "message": "Transferring to the debate workflow to begin analysis."
+    }
+
+start_workflow_tool = FunctionTool(func=start_debate_workflow)
+
 # =============================================================================
 # AGENT DEFINITIONS
 # =============================================================================
@@ -115,12 +130,15 @@ role_assignment_agent = LlmAgent(
     # {debate_topic} is a template variable that gets filled in at runtime
     instruction="""You define the debate positions for a given topic.
 
-Based on the topic provided ({debate_topic}), your task is to:
+You will receive a debate topic from the previous agent. Your task is to:
 1. Analyze the topic and rephrase it into a clear, debatable question if needed
 2. Define two distinct positions: Proponent (FOR) and Opponent (AGAINST)  
 3. Outline the main argument for each side (1-2 sentences each)
 
+The debate topic will be provided in the conversation context from the previous agent interaction.
+
 Output Format:
+**Debate Topic:** [Restate the topic clearly]
 **Debate Question:** [Clear, focused debate question]
 
 **Proponent Position:** [What they argue FOR]
@@ -420,28 +438,56 @@ root_agent = LlmAgent(
     name="DebateTeamGreeter",
     model=GEMINI_MODEL,
     
+    # Tools: The greeter can use the start_workflow_tool to transfer to the debate team
+    tools=[start_workflow_tool],
+    
     # This instruction handles multiple conversation states and demonstrates
     # agent transfer patterns
     instruction="""You are the welcoming host for an advanced AI Debate Team featuring ITERATIVE DEBATE ROUNDS.
 
-Your job is to:
+Your job is to identify debate topics and initiate the debate workflow. Be flexible with user input:
+
+**TOPIC DETECTION AND HANDLING:**
+
 1. **If this is a greeting** (like "hello", "hi", "hey", etc.):
    - Warmly introduce yourself and the AI Debate Team
-   - Explain the enhanced process: "We'll research both sides, then conduct REAL iterative debate rounds where our Proponent and Opponent agents engage in back-and-forth discussion, and provide a balanced summary"
+   - Explain the process: "We'll research both sides, then conduct REAL iterative debate rounds where our Proponent and Opponent agents engage in back-and-forth discussion, and provide a balanced summary"
    - Ask them: "What topic would you like us to debate today?"
-   - Output just your greeting and question
+   - Output just your greeting and question (do NOT transfer yet)
 
-2. **If this appears to be a debate topic** (like "renewable energy", "space exploration", etc.):
-   - Confirm the topic: "Excellent! Let's conduct an iterative debate on: [topic]"
-   - Transfer to your sub-agent 'AIDebateWorkflow' to begin the comprehensive analysis
-   - The workflow will handle role assignment, research, REAL iterative debate rounds, and summary
+2. **If you can identify ANY debate topic** from the input (regardless of how it's phrased):
+   - Extract the core topic from their message  
+   - Say: "Excellent! Let's conduct an iterative debate on: [TOPIC]"
+   - Output the topic on the final line for capture
+   - Use the 'start_debate_workflow' tool to transfer to the debate team
 
 3. **If returning after a debate summary**:
    - Thank them for the engaging iterative debate
    - Ask: "Would you like to explore another topic? I'm ready for the next iterative debate!"
-   - If they provide a new topic, repeat step 2
+   - When they provide a new topic, treat it as case 2
 
-Be conversational and emphasize the iterative, back-and-forth nature of the debate system. Once you have a clear debate topic, transfer control to AIDebateWorkflow.""",
+**TOPIC EXTRACTION EXAMPLES:**
+- Input: "renewable energy" → Output ends with: "renewable energy"
+- Input: "Should we use nuclear power?" → Output ends with: "nuclear power"  
+- Input: "I want to debate climate change vs economic growth" → Output ends with: "climate change vs economic growth"
+- Input: "artificial intelligence ethics" → Output ends with: "artificial intelligence ethics"
+- Input: "space exploration is important" → Output ends with: "space exploration"
+- Input: "the best pet" → Output ends with: "the best pet"
+
+**OUTPUT FORMAT EXAMPLE:**
+"Excellent! Let's conduct an iterative debate on nuclear power!
+I'm now transferring this topic to our debate workflow team.
+
+nuclear power"
+
+**KEY REQUIREMENTS:**
+- Be flexible - users may provide topics in many different ways
+- Always extract and confirm the topic before transferring
+- Always make the topic clear in your response when transferring
+- Transfer to AIDebateWorkflow as soon as you have a clear topic
+- Don't require users to say hello first - if they give a topic directly, go with it!
+
+Be conversational and emphasize the iterative, back-and-forth nature of the debate system.""",
     
     description="Greets users, introduces the iterative debate process, transfers to workflow, and handles follow-ups.",
     
