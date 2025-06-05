@@ -126,6 +126,8 @@ proponent_debater = LlmAgent(
 **Your Task:**
 Make ONE strong argument FOR your position. This is a single round in an ongoing debate.
 
+**IMPORTANT:** Start your response with "🟢 **PROPONENT:**" to clearly identify your role.
+
 - Use your research evidence effectively  
 - Be persuasive but concise (2-3 sentences)
 - Stay focused on your PRO position
@@ -133,7 +135,7 @@ Make ONE strong argument FOR your position. This is a single round in an ongoing
 
 If this feels like an advanced round (after several exchanges) and you believe the key points have been thoroughly covered from both sides, you may call the 'end_debate' tool to conclude the discussion.
 
-Output your argument clearly and persuasively.""",
+Format: 🟢 **PROPONENT:** [Your clear, persuasive argument]""",
     description="Makes individual pro arguments in the iterative debate.",
     tools=[end_debate_tool],
     output_key="current_round"
@@ -156,6 +158,8 @@ opponent_debater = LlmAgent(
 **Your Task:**
 Make ONE strong argument AGAINST the position. This is a single round in an ongoing debate.
 
+**IMPORTANT:** Start your response with "🔴 **OPPONENT:**" to clearly identify your role.
+
 - Use your research evidence strategically
 - Be persuasive but concise (2-3 sentences)  
 - Stay focused on your AGAINST position
@@ -163,7 +167,7 @@ Make ONE strong argument AGAINST the position. This is a single round in an ongo
 
 If this feels like an advanced round (after several exchanges) and you believe the key points have been thoroughly covered from both sides, you may call the 'end_debate' tool to conclude the discussion.
 
-Output your counter-argument clearly and persuasively.""",
+Format: 🔴 **OPPONENT:** [Your clear, persuasive counter-argument]""",
     description="Makes individual opposing arguments in the iterative debate.",
     tools=[end_debate_tool],
     output_key="current_round"
@@ -190,30 +194,19 @@ debate_aggregator = LlmAgent(
 Proponent Research: {proponent_research_findings}
 Opponent Research: {opponent_research_findings}
 
-**Iterative Rounds:**
+**Raw Iterative Rounds (with agent labels):**
 {current_round}
 
 **Your Task:**
-Format the debate rounds into a clear, readable structure:
+The raw rounds above already include clear labels (🟢 **PROPONENT:** and 🔴 **OPPONENT:**). 
+Simply organize these labeled rounds into a clean chronological structure:
 
-**DEBATE ROUNDS:**
+**📋 ITERATIVE DEBATE ROUNDS:**
 
-**Round 1 - Proponent Opening:**
-[First proponent argument]
+[Present each round exactly as labeled by the agents, maintaining the 🟢 **PROPONENT:** and 🔴 **OPPONENT:** labels]
 
-**Round 1 - Opponent Response:**  
-[First opponent argument]
-
-**Round 2 - Proponent:** 
-[Second proponent argument]
-
-**Round 2 - Opponent:**
-[Second opponent argument]
-
-[Continue for all rounds that occurred...]
-
-Present the rounds chronologically and clearly label each turn.""",
-    description="Aggregates the iterative debate rounds into a formatted structure.",
+Preserve the agent labels and present all rounds that occurred in chronological order.""",
+    description="Aggregates and organizes the labeled iterative debate rounds.",
     output_key="debate_rounds"
 )
 
