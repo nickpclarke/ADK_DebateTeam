@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "debate_team"
+version = "0.1.0"
+description = "AI Debate Team - Multi-agent debate system using Google ADK"
+authors = [{name = "Nicky", email = "nicky@livecreative.com"}]
+license = {text = "MIT"}
+requires-python = ">=3.9"
+dependencies = [
+    "google-adk>=1.2.1",
+    "google-genai>=1.5.0,<2.0.0",
+    "pydantic>=2.10.6,<3.0.0",
+]
+
+[project.optional-dependencies]
+deployment = [
+    "absl-py>=2.2.1,<3.0.0",
+    "python-dotenv>=1.0.0",
+    "google-cloud-aiplatform[agent_engines]>=1.95.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["debate_team*"]
