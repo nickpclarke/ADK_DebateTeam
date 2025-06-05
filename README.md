@@ -11,7 +11,7 @@ A **comprehensive demonstration of Google's Agent Development Kit (ADK)** capabi
 | **LlmAgent** | `DebateTeamGreeter`, `RoleAssignmentAgent`, `ProponentDebater`, etc. | Core conversational and reasoning agents |
 | **SequentialAgent** | `AIDebateWorkflow` | Orchestrates step-by-step workflow execution |
 | **ParallelAgent** | `ParallelStanceResearcher` | Concurrent research execution (Pro + Con) |
-| **LoopAgent** | `IterativeDebateLoop` | **Real iterative debate rounds** between agents |
+| **LoopAgent** | `IterativeDebateLoop` | Iterative debate rounds between agents |
 
 ### 🛠️ **ADK Capabilities Demonstrated:**
 
