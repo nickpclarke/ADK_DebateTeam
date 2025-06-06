@@ -179,7 +179,11 @@ Focus on:
 - Real-world examples
 - Research findings
 
-Summarize your findings concisely but persuasively.""",
+Summarize your findings concisely but persuasively.  
+
+Include - Key Reference Articles (List of Key Sources):
+    For each significant article/document used:
+     * <a href="[Full URL]" target="_blank">[Article Title]</a>""",
     
     # Tools: List of tools this agent can use
     # google_search is a built-in ADK tool for web searches
@@ -208,7 +212,11 @@ Focus on:
 - Real-world examples  
 - Research findings
 
-Summarize your findings concisely but persuasively.""",
+Summarize your findings concisely but persuasively.  
+
+Include - Key Reference Articles (List of Key Sources):
+    For each significant article/document used:
+     * <a href="[Full URL]" target="_blank">[Article Title]</a>""",
     
     # Same tools as proponent_researcher
     tools=[google_search],
@@ -268,7 +276,9 @@ Make ONE strong argument FOR your position. This is a single round in an ongoing
 
 If this feels like an advanced round (after several exchanges) and you believe the key points have been thoroughly covered from both sides, you may call the 'end_debate' tool to conclude the discussion.
 
-Format: 🟢 **PROPONENT:** [Your clear, persuasive argument]""",
+Format:  
+<br>🟢 **PROPONENT:**<br>  
+[Your clear, persuasive argument]<br>""",
     
     description="Makes individual pro arguments in the iterative debate.",
     
@@ -307,7 +317,9 @@ Make ONE strong argument AGAINST the position. This is a single round in an ongo
 
 If this feels like an advanced round (after several exchanges) and you believe the key points have been thoroughly covered from both sides, you may call the 'end_debate' tool to conclude the discussion.
 
-Format: 🔴 **OPPONENT:** [Your clear, persuasive counter-argument]""",
+Format:   
+<br>🔴 **OPPONENT:**<br>      
+[Your clear, persuasive counter-argument]<br>""",
     
     description="Makes individual opposing arguments in the iterative debate.",
     
@@ -338,40 +350,72 @@ iterative_debate_loop = LoopAgent(
     # 2. An agent calls tool_context.actions.escalate = True (our end_debate tool)
 )
 
-# --- 6. DEBATE HISTORY AGGREGATOR ---
-# This agent takes the raw output from the loop and formats it nicely
+# --- 6. DEBATE STRATEGIC ANALYST ---
+# This agent provides deep analysis of the debate performance and strategy instead of just regurgitating rounds
 debate_aggregator = LlmAgent(
-    name="DebateAggregator",
+    name="DebateStrategicAnalyst",
     model=GEMINI_MODEL,
     
-    # This agent references the loop's output: {current_round}
-    # The loop output contains all the individual debate rounds
-    instruction="""You compile the iterative debate rounds into a readable format.
+    # This agent analyzes the debate rounds for strategic insights and quality assessment
+    instruction="""You are a strategic debate analyst providing deep insights into the iterative debate performance.
 
-**Role Context:**
-{role_assignments}
-
-**Research Background:**
+**Available Information:**
+Role Context: {role_assignments}
 Proponent Research: {proponent_research_findings}
 Opponent Research: {opponent_research_findings}
+Debate Rounds: {current_round}
 
-**Raw Iterative Rounds (with agent labels):**
-{current_round}
+**Your Analysis Task:**
+Provide a strategic analysis of the debate performance with these key insights:
 
-**Your Task:**
-The raw rounds above already include clear labels (🟢 **PROPONENT:** and 🔴 **OPPONENT:**). 
-Simply organize these labeled rounds into a clean chronological structure:
+## 🎯 **STRATEGIC DEBATE ANALYSIS**
 
-**📋 ITERATIVE DEBATE ROUNDS:**
+### **1. Argument Strength Assessment**
+- Rate each side's strongest and weakest arguments (1-10 scale)
+- Identify which evidence was most/least compelling
+- Note any logical fallacies or reasoning gaps
 
-[Present each round exactly as labeled by the agents, maintaining the 🟢 **PROPONENT:** and 🔴 **OPPONENT:** labels]
+### **2. Tactical Performance**
+- **Proponent Strategy:** How effectively did they advance their position?
+- **Opponent Strategy:** How well did they counter and create doubt?
+- **Missed Opportunities:** What stronger arguments could each side have made?
 
-Preserve the agent labels and present all rounds that occurred in chronological order.""",
+### **3. Evidence Utilization**
+- Which research findings were used most effectively?
+- What supporting evidence went unused?
+- Were there any unsupported claims?
+
+### **4. Debate Flow & Momentum**
+- **Opening Round:** Who established stronger initial framing?
+- **Middle Rounds:** Where did momentum shift and why?
+- **Closing Rounds:** Who delivered more compelling final arguments?
+
+### **5. Critical Turning Points**
+- Identify 1-2 moments that changed the debate trajectory
+- Explain what made these exchanges particularly effective
+
+### **6. Debate Quality Metrics**
+- **Depth:** How thoroughly were key issues explored? (1-10)
+- **Nuance:** Did arguments acknowledge complexity? (1-10)
+- **Civility:** Professional tone and respectful disagreement? (1-10)
+- **Innovation:** Any surprising or creative arguments? (1-10)
+
+### **7. Strategic Recommendations**
+- What would strengthen the Proponent's case in future debates?
+- How could the Opponent improve their counter-arguments?
+- What additional evidence or angles would be valuable?
+
+**Format Guidelines:**
+- Use clear headings with emojis for readability
+- Include specific examples from the debate rounds
+- Provide numerical ratings where indicated
+- Be objective but insightful - help users understand argumentation effectiveness
+- Focus on strategic analysis, not just content repetition""",
     
-    description="Aggregates and organizes the labeled iterative debate rounds.",
+    description="Analyzes debate strategy, argument strength, and provides tactical insights rather than just reformatting rounds.",
     
-    # Output becomes available as {debate_rounds} for the final summary
-    output_key="debate_rounds"
+    # Output becomes available as {debate_analysis} for the final summary
+    output_key="debate_analysis"
 )
 
 # --- 7. DEBATE SUMMARIZER ---
@@ -386,22 +430,26 @@ debate_summarizer = LlmAgent(
 Role Assignments: {role_assignments}
 Proponent Research: {proponent_research_findings}
 Opponent Research: {opponent_research_findings}
-Debate Rounds: {debate_rounds}
+Strategic Analysis: {debate_analysis}
 
 Review all the information from the iterative debate process to create a comprehensive summary.
 
+Your task is to synthesize the strategic analysis with the overall debate context to provide a final assessment.
+
 Include:
-1. **Topic Overview:** Restate the debate question
-2. **Key Arguments:** Main points from both Proponent and Opponent across all rounds
-3. **Evidence Presented:** Important facts/research from both sides
-4. **Round Evolution:** How arguments developed through the iterations
-5. **Points of Contention:** Where the sides fundamentally disagreed
-6. **Debate Quality:** Note the depth achieved through iterative exchange
-7. **Complexity Note:** Acknowledge the nuanced nature of the issue
+1. **Topic Overview:** Restate the debate question and core positions
+2. **Key Arguments:** Main points from both sides (drawing from the strategic analysis)
+3. **Evidence Quality:** Highlight the most compelling research and data presented
+4. **Debate Performance:** Summarize the strategic analysis insights on argument effectiveness
+5. **Critical Insights:** Include the most important strategic observations and turning points
+6. **Balanced Assessment:** Present both sides' strongest cases fairly
+7. **Learning Value:** What did this debate reveal about the topic's complexity?
+
+**Integration Note:** Use the strategic analysis to inform your summary, but don't simply repeat it. Synthesize the insights into a cohesive final assessment that serves as both conclusion and learning tool.
 
 After providing your complete summary, use the 'return_to_greeter' tool to transfer control back to the DebateTeamGreeter.
 
-Maintain objectivity and present both sides fairly.""",
+Maintain objectivity while incorporating the analytical insights provided.""",
     
     description="Summarizes the entire iterative debate with balanced analysis and returns to greeter.",
     
@@ -423,8 +471,8 @@ debate_workflow = SequentialAgent(
         role_assignment_agent,      # Step 1: Define debate positions  
         parallel_stance_researcher, # Step 2: Research both sides (in parallel)
         iterative_debate_loop,     # Step 3: Conduct iterative debate rounds
-        debate_aggregator,         # Step 4: Format the debate rounds nicely
-        debate_summarizer          # Step 5: Create final summary and return to greeter
+        debate_aggregator,         # Step 4: Analyze debate strategy and effectiveness
+        debate_summarizer          # Step 5: Create final summary integrating strategic insights
     ]
     
     # ADK Pattern Note: Each agent in the sequence has access to outputs
@@ -476,9 +524,7 @@ Your job is to identify debate topics and initiate the debate workflow. Be flexi
 
 **OUTPUT FORMAT EXAMPLE:**
 "Excellent! Let's conduct an iterative debate on nuclear power!
-I'm now transferring this topic to our debate workflow team.
-
-nuclear power"
+I'm now transferring this topic to our debate workflow team.  "
 
 **KEY REQUIREMENTS:**
 - Be flexible - users may provide topics in many different ways
