@@ -137,17 +137,22 @@ You will receive a debate topic from the previous agent. Your task is to:
 
 The debate topic will be provided in the conversation context from the previous agent interaction.
 
-Output Format:
-**Debate Topic:** [Restate the topic clearly]
-**Debate Question:** [Clear, focused debate question]
+<br><br>
 
-**Proponent Position:** [What they argue FOR]
-**Proponent Main Argument:** [Their core reasoning]
+## 📋 **DEBATE SETUP**
 
-**Opponent Position:** [What they argue AGAINST]  
-**Opponent Main Argument:** [Their core reasoning]
+<br>
 
-Be clear and balanced in defining both positions.""",
+**Debate Topic:** [Restate the topic clearly]<br>
+**Debate Question:** [Clear, focused debate question]<br><br>
+
+**Proponent Position:** [What they argue FOR]<br>
+**Proponent Main Argument:** [Their core reasoning]<br><br>
+
+**Opponent Position:** [What they argue AGAINST]<br>  
+**Opponent Main Argument:** [Their core reasoning]<br><br>
+
+Be clear and balanced in defining both positions.<br><br>""",
     
     # Description: Human-readable description of what this agent does
     description="Defines Proponent and Opponent roles and their main arguments for the debate topic.",
@@ -173,17 +178,23 @@ Role Assignments: {role_assignments}
 
 Look at the role assignments and find 2-3 strong supporting points, facts, or examples that support the Proponent's stance. Use Google Search to find current, credible information.
 
+<br><br>
+
+## 🟢 **PROPONENT RESEARCH FINDINGS**
+
+<br>
+
 Focus on:
-- Statistical evidence
-- Expert opinions  
-- Real-world examples
-- Research findings
+- Statistical evidence<br>
+- Expert opinions<br>  
+- Real-world examples<br>
+- Research findings<br><br>
 
-Summarize your findings concisely but persuasively.  
+Summarize your findings concisely but persuasively.<br><br>  
 
-Include - Key Reference Articles (List of Key Sources):
-    For each significant article/document used:
-     * <a href="[Full URL]" target="_blank">[Article Title]</a>""",
+### 📚 **Key Reference Articles (List of Key Sources):**<br>
+For each significant article/document used:<br>
+* <a href="[Full URL]" target="_blank">[Article Title]</a><br><br>""",
     
     # Tools: List of tools this agent can use
     # google_search is a built-in ADK tool for web searches
@@ -206,17 +217,23 @@ Role Assignments: {role_assignments}
 
 Look at the role assignments and find 2-3 strong supporting points, facts, or examples that support the Opponent's stance. Use Google Search to find current, credible information.
 
+<br><br>
+
+## 🔴 **OPPONENT RESEARCH FINDINGS**
+
+<br>
+
 Focus on:
-- Statistical evidence
-- Expert opinions
-- Real-world examples  
-- Research findings
+- Statistical evidence<br>
+- Expert opinions<br>
+- Real-world examples<br>  
+- Research findings<br><br>
 
-Summarize your findings concisely but persuasively.  
+Summarize your findings concisely but persuasively.<br><br>  
 
-Include - Key Reference Articles (List of Key Sources):
-    For each significant article/document used:
-     * <a href="[Full URL]" target="_blank">[Article Title]</a>""",
+### 📚 **Key Reference Articles (List of Key Sources):**<br>
+For each significant article/document used:<br>
+* <a href="[Full URL]" target="_blank">[Article Title]</a><br><br>""",
     
     # Same tools as proponent_researcher
     tools=[google_search],
@@ -276,9 +293,10 @@ Make ONE strong argument FOR your position. This is a single round in an ongoing
 
 If this feels like an advanced round (after several exchanges) and you believe the key points have been thoroughly covered from both sides, you may call the 'end_debate' tool to conclude the discussion.
 
-Format:  
-<br>🟢 **PROPONENT:**<br>  
-[Your clear, persuasive argument]<br>""",
+Format:
+<br><br>  
+🟢 **PROPONENT:**<br>  
+[Your clear, persuasive argument]<br><br>""",
     
     description="Makes individual pro arguments in the iterative debate.",
     
@@ -317,9 +335,10 @@ Make ONE strong argument AGAINST the position. This is a single round in an ongo
 
 If this feels like an advanced round (after several exchanges) and you believe the key points have been thoroughly covered from both sides, you may call the 'end_debate' tool to conclude the discussion.
 
-Format:   
-<br>🔴 **OPPONENT:**<br>      
-[Your clear, persuasive counter-argument]<br>""",
+Format:
+<br><br>   
+🔴 **OPPONENT:**<br>      
+[Your clear, persuasive counter-argument]<br><br>""",
     
     description="Makes individual opposing arguments in the iterative debate.",
     
@@ -365,52 +384,54 @@ Proponent Research: {proponent_research_findings}
 Opponent Research: {opponent_research_findings}
 Debate Rounds: {current_round}
 
-**Your Analysis Task:**
-Provide a strategic analysis of the debate performance with these key insights:
+**Your Analysis Task:**<br>
+Provide a strategic analysis of the debate performance with these key insights:<br><br>
 
-## 🎯 **STRATEGIC DEBATE ANALYSIS**
+<br><br> 🎯 **STRATEGIC DEBATE ANALYSIS**
 
-### **1. Argument Strength Assessment**
-- Rate each side's strongest and weakest arguments (1-10 scale)
-- Identify which evidence was most/least compelling
-- Note any logical fallacies or reasoning gaps
+<br>
 
-### **2. Tactical Performance**
-- **Proponent Strategy:** How effectively did they advance their position?
-- **Opponent Strategy:** How well did they counter and create doubt?
-- **Missed Opportunities:** What stronger arguments could each side have made?
+### **1. Argument Strength Assessment**<br>
+- Rate each side's strongest and weakest arguments (1-10 scale)<br>
+- Identify which evidence was most/least compelling<br>
+- Note any logical fallacies or reasoning gaps<br><br>
 
-### **3. Evidence Utilization**
-- Which research findings were used most effectively?
-- What supporting evidence went unused?
-- Were there any unsupported claims?
+### **2. Tactical Performance**<br>
+- **Proponent Strategy:** How effectively did they advance their position?<br>
+- **Opponent Strategy:** How well did they counter and create doubt?<br>
+- **Missed Opportunities:** What stronger arguments could each side have made?<br><br>
 
-### **4. Debate Flow & Momentum**
-- **Opening Round:** Who established stronger initial framing?
-- **Middle Rounds:** Where did momentum shift and why?
-- **Closing Rounds:** Who delivered more compelling final arguments?
+### **3. Evidence Utilization**<br>
+- Which research findings were used most effectively?<br>
+- What supporting evidence went unused?<br>
+- Were there any unsupported claims?<br><br>
 
-### **5. Critical Turning Points**
-- Identify 1-2 moments that changed the debate trajectory
-- Explain what made these exchanges particularly effective
+### **4. Debate Flow & Momentum**<br>
+- **Opening Round:** Who established stronger initial framing?<br>
+- **Middle Rounds:** Where did momentum shift and why?<br>
+- **Closing Rounds:** Who delivered more compelling final arguments?<br><br>
 
-### **6. Debate Quality Metrics**
-- **Depth:** How thoroughly were key issues explored? (1-10)
-- **Nuance:** Did arguments acknowledge complexity? (1-10)
-- **Civility:** Professional tone and respectful disagreement? (1-10)
-- **Innovation:** Any surprising or creative arguments? (1-10)
+### **5. Critical Turning Points**<br>
+- Identify 1-2 moments that changed the debate trajectory<br>
+- Explain what made these exchanges particularly effective<br><br>
 
-### **7. Strategic Recommendations**
-- What would strengthen the Proponent's case in future debates?
-- How could the Opponent improve their counter-arguments?
-- What additional evidence or angles would be valuable?
+### **6. Debate Quality Metrics**<br>
+- **Depth:** How thoroughly were key issues explored? (1-10)<br>
+- **Nuance:** Did arguments acknowledge complexity? (1-10)<br>
+- **Civility:** Professional tone and respectful disagreement? (1-10)<br>
+- **Innovation:** Any surprising or creative arguments? (1-10)<br><br>
 
-**Format Guidelines:**
-- Use clear headings with emojis for readability
-- Include specific examples from the debate rounds
-- Provide numerical ratings where indicated
-- Be objective but insightful - help users understand argumentation effectiveness
-- Focus on strategic analysis, not just content repetition""",
+### **7. Strategic Recommendations**<br>
+- What would strengthen the Proponent's case in future debates?<br>
+- How could the Opponent improve their counter-arguments?<br>
+- What additional evidence or angles would be valuable?<br><br>
+
+**Format Guidelines:**<br>
+- Use clear headings with emojis for readability<br>
+- Include specific examples from the debate rounds<br>
+- Provide numerical ratings where indicated<br>
+- Be objective but insightful - help users understand argumentation effectiveness<br>
+- Focus on strategic analysis, not just content repetition<br><br>""",
     
     description="Analyzes debate strategy, argument strength, and provides tactical insights rather than just reformatting rounds.",
     
@@ -425,33 +446,50 @@ debate_summarizer = LlmAgent(
     model=GEMINI_MODEL,
     
     # This agent has access to ALL previous outputs from the entire workflow
-    instruction="""You provide a balanced summary of the entire iterative debate.
+    instruction="""You are the final judge who declares the debate winner and provides conclusive takeaways.
 
-Role Assignments: {role_assignments}
-Proponent Research: {proponent_research_findings}
-Opponent Research: {opponent_research_findings}
-Strategic Analysis: {debate_analysis}
+Based on the strategic analysis provided, your job is to make the FINAL CALL and provide decisive conclusions - NOT to repeat the detailed analysis.<br><br>
 
-Review all the information from the iterative debate process to create a comprehensive summary.
+Available Information:<br>
+- Role Assignments: {role_assignments}<br>
+- Strategic Analysis: {debate_analysis}<br><br>
 
-Your task is to synthesize the strategic analysis with the overall debate context to provide a final assessment.
+<br><br> 🏆 **FINAL DEBATE JUDGMENT**
 
-Include:
-1. **Topic Overview:** Restate the debate question and core positions
-2. **Key Arguments:** Main points from both sides (drawing from the strategic analysis)
-3. **Evidence Quality:** Highlight the most compelling research and data presented
-4. **Debate Performance:** Summarize the strategic analysis insights on argument effectiveness
-5. **Critical Insights:** Include the most important strategic observations and turning points
-6. **Balanced Assessment:** Present both sides' strongest cases fairly
-7. **Learning Value:** What did this debate reveal about the topic's complexity?
+<br>
 
-**Integration Note:** Use the strategic analysis to inform your summary, but don't simply repeat it. Synthesize the insights into a cohesive final assessment that serves as both conclusion and learning tool.
+Your task is to provide a crisp, decisive conclusion:<br><br>
 
-After providing your complete summary, use the 'return_to_greeter' tool to transfer control back to the DebateTeamGreeter.
+### **🥇 DEBATE WINNER**<br>
+**Winner:** [Proponent OR Opponent]<br>
+**Margin of Victory:** [Decisive/Clear/Narrow]<br>
+**Key Reason for Victory:** [1-2 sentences explaining why they won]<br><br>
 
-Maintain objectivity while incorporating the analytical insights provided.""",
+### **⚡ DECISIVE MOMENTS**<br>
+**Game-Changer:** [The single most impactful argument or exchange]<br>
+**Turning Point:** [When momentum shifted decisively]<br><br>
+
+### **🎯 PERFORMANCE GRADES**<br>
+**Proponent Overall:** [A-F grade] - [One sentence why]<br>
+**Opponent Overall:** [A-F grade] - [One sentence why]<br><br>
+
+### **💡 KEY TAKEAWAYS**<br>
+**For the Topic:** [What did this debate reveal about the issue?]<br>
+**For Future Debaters:** [One key lesson for improving arguments]<br>
+**Most Compelling Evidence:** [What research/data was most persuasive?]<br><br>
+
+### **🔥 DEBATE HIGHLIGHTS**<br>
+**Best Proponent Moment:** [Their strongest argument]<br>
+**Best Opponent Moment:** [Their strongest counter]<br>
+**Missed Opportunity:** [What could have changed the outcome?]<br><br>
+
+**JUDGE'S FINAL VERDICT:** [2-3 sentences wrapping up why this winner deserved victory and what made this debate valuable]<br><br>
+
+**Important:** Be decisive! Make clear judgments based on the strategic analysis. Don't hedge or repeat analysis - provide conclusions and call a winner!<br><br>
+
+After providing your judgment, use the 'return_to_greeter' tool to transfer control back to the DebateTeamGreeter.<br><br>""",
     
-    description="Summarizes the entire iterative debate with balanced analysis and returns to greeter.",
+    description="Final judge who declares the debate winner and provides decisive conclusions without repeating analysis.",
     
     output_key="final_debate_summary",
     
